@@ -12,7 +12,7 @@ Programs that have similar purposes are near to each other, and programs that di
 map. It shows a close-up of one particular outcrop in this sea, the Island of
 I/O-Bound Programs.
 
-![The Island of IO-Bound Programs]( https://ibb.co/m6FdTc )
+![The Island of IO-Bound Programs]( https://raw.githubusercontent.com/Abhicoding/Node.js-the-right-way/master/Chapter%201/the%20Island%20of%0D%20IO-Bound%20Programs.png )
 
 I/O-bound programs are constrained by data access. These are programs
 where adding more processing power or RAM often makes little difference.

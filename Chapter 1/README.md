@@ -30,7 +30,7 @@ our collective mental energy live here.
 
 * Node.js couples JavaScript with an event loop for quickly dispatching operations when events occur.
 
-![Event Loop](/home/abhishek/Desktop/Node.js-the-right-way/Chapter 1/event-loop.png)
+![Event Loop](https://raw.githubusercontent.com/Abhicoding/Node.js-the-right-way/master/Chapter%201/event-loop.png)
 
 * Everything else your program might do—like waiting for data from a file or
 an incoming HTTP request—is handled by Node.js, in parallel, behind the

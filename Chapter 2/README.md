@@ -24,7 +24,7 @@ $ touch target.txt
 $ echo, > target.txt
 ```
 
-Enter following code
+Enter following code and save this file as *watcher.js* alongside the target.txt file.
 
 ```Javascript
 'use strict'
@@ -35,16 +35,12 @@ fs.watch('target.txt', ()=> console.log('file changed!'));
 
 console.log('Now watching target.txt for changes...')
 ```
-
-
-Save this file as *watcher.js* alongside the target.txt file.
-
 ***Points to note :***
 * A variable declared with ```const``` must be assigned a value when
 declared, and cannot be assigned to again (which would cause a runtime
 error).
 
-* The require() function pulls in a Node.js module and returns it.
+* The ```require()``` function pulls in a Node.js module and returns it.
 
 * The fs module’s ```watch()``` method, takes a path to a file and a callback function to invoke whenever the file changes.
 
@@ -56,7 +52,7 @@ error).
     
     This is an arrow function expression. Arrow functions have a big advantage over their ancestral counterparts as they do not create a new scope for ```this```.
 
-Run following in terminal
+Run the following command in terminal
 ``` Unix
 $ Node watcher.js
 Now watching target.txt for changes...
@@ -68,7 +64,7 @@ $ watch -n 1 touch target.txt
 This command will touch the target file once every second until you stop it.
 #### Visualizing the Event Loop
 
-The File-watcher program written in previous step causes Node.js to go
+The File-watcher program written previously causes Node.js to go
 through each of these steps, one by one :
 
 * The script ```watcher.js``` loads, running all the way through to the last line, which produces the *Now watching* message in the console.
@@ -77,9 +73,7 @@ through each of these steps, one by one :
 * It executes callback function when any change is detected.
 * It determines that the program still has not finished, and resumes waiting.
 #### Reading Command-Line Arguments
-
 Create ```watcher-argv.js``` and enter this :
-
 ```Javascript
 const fs = require('fs');
 
@@ -93,7 +87,7 @@ fs.watch(filename, () => console.log(`File ${filename} changed!`));
 
 console.log(`Now watching ${filename} for changes...`);
 ```
-Run the file:
+Run the program:
 ``` Unix
 $ node watcher-argv.js target.txt
 ```
@@ -117,7 +111,7 @@ an exception.
     Any unhandled exception thrown in Node.js will halt the process.
 
 ### Spawning a Child Process
-Open the editor, enter following code. Save file as ```watcher-spawn.js``` and run it :
+In the editor, enter following code and save the file as ```watcher-spawn.js``` and run it :
 ``` Javascript
 'use strict'
 
@@ -164,3 +158,34 @@ This is what the ```pipe()``` method does.
 ### Capturing Data from an EventEmitter
 *EventEmitter is a very important class in Node.js.*
 
+In this section we replace the ```fs.watch()``` with following code and save it as ```watcher-spawn-parse.js```
+
+``` Javascript
+fs.watch(filename, () => {
+	const ls = spawn('ls', ['-l', '-h', filename]);
+	let output = '';
+	ls.stdout.on('data', chunk => output +=chunk);
+	ls.on('close', () => {
+		const parts = output.split(/\s+/);
+		console.log([parts[0], parts[4], parts[8]]);
+	});
+});
+```
+After running the program and using ```touch``` we should see soemthing like this :
+```Unix
+$ node watcher-spawn-parse.js target.txt
+Now watching target.txt for changes...
+[ '-rw-rw-r--', '11', 'target.txt' ]
+```
+***Points to note :***
+* The new callback does the same as before creating child process and assigns it to ```ls```
+* The ```output``` variable buffers the output coming from the child process.
+* Next we added an *event listener*. An event listener is a callback function that is invoked when an event of specified type is dispatched.
+* The Stream class
+inherits from EventEmitter, so we can listen for events from the child process’s standard output stream.
+
+    ```Javascript
+    ls.stdout.on('data', chunk => output += chunk)
+    ```
+    The ```on()``` method adds a listener for the specified event type. Here we are listening for data events  coming out of the stream.
+    

@@ -2,6 +2,7 @@
 
 ## Chapter 1
 ## Getting Started
+***
 
 *"The best line of code is the one you never had to write."*
 

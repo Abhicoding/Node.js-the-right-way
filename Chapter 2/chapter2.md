@@ -1,7 +1,7 @@
 # Node.js-the-right-way practise
 ## Chapter 2 
 ## Wrangling the File System
-
+***
 ### Chapter objectives :
 * #### Node.js Core
   Using Node.js’s module system to bring in core libraries.

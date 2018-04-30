@@ -2,8 +2,8 @@
 const fs = require('fs')
 
 fs.readFile('target.txt', (err, data) => {
-	if (err){
-		throw err;
-	}
-	console.log(data.toString());
-});
+  if (err) {
+    throw err
+  }
+  console.log(data.toString())
+})

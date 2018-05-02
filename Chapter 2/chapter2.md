@@ -18,13 +18,13 @@
 
 Create a text file
 
-``` Unix
+``` bash
 $ touch target.txt
 
 $ echo, > target.txt
 ```
 
-Enter following code and save this file as *watcher.js* alongside the target.txt file.
+Enter following code and save this file as ```watcher.js``` alongside the ```target.txt``` file.
 
 ```Javascript
 'use strict'
@@ -42,23 +42,25 @@ error).
 
 * The ```require()``` function pulls in a Node.js module and returns it.
 
-* The fs module’s ```watch()``` method, takes a path to a file and a callback function to invoke whenever the file changes.
+* The ```fs``` module’s ```watch()``` method, takes a path to a file and a callback function to invoke whenever the file changes.
 
     In JavaScript, functions are first-class citizens meaning they can be assigned to variables and passed as parameters to other functions.
 
 * The callback :
 
-    ```() => console.log('File changed!')```
+    ```javascript
+    () => console.log('File changed!')
+    ```
     
     This is an arrow function expression. Arrow functions have a big advantage over their ancestral counterparts as they do not create a new scope for ```this```.
 
 Run the following command in terminal
-``` Unix
+``` bash
 $ Node watcher.js
 Now watching target.txt for changes...
 ```
 Use the ```watch``` command to detect changes using ```touch``` on target file.
-``` Unix
+``` bash
 $ watch -n 1 touch target.txt
 ```
 This command will touch the target file once every second until you stop it.
@@ -88,7 +90,7 @@ fs.watch(filename, () => console.log(`File ${filename} changed!`))
 console.log(`Now watching ${filename} for changes...`)
 ```
 Run the program:
-``` Unix
+``` bash
 $ node watcher-argv.js target.txt
 ```
 ***Points to note :***
@@ -96,12 +98,12 @@ $ node watcher-argv.js target.txt
 * We used ```process.argv``` to access the incoming command-line arguments.
 ```argv``` stands for argument vector; it’s an array containing node and the full path
 to the ```watcher-argv.js``` as its first two elements. The third element (that is, at
-index 2) is target.txt, the name of our target file. 
+index 2) is ```target.txt```, the name of our target file. 
 * Backtick characters (‘) are called *template strings*. They can span multiple lines and support expression extrapolation i.e. expression inside ```${}``` and it will insert stringified result.
-* If a target file name is not provided to watcher-argv.js, the program will throw
+* If a target file name is not provided to ```watcher-argv.js```, the program will throw
 an exception.
 
-    ``` Unix
+    ``` bash
     $ node watcher-argv.js
     /home/abhishek/Desktop/Node.js-the-right-way/Chapter 2/watcher-argv.js:6
         throw Error('A file to watch must be specified!');
@@ -132,7 +134,7 @@ console.log(`Now watching ${filename} for changes...`)
 ```
 If we touch the target file, the Node.js program will produce something like this:
 
-```Unix
+```bash
 -rw-rw-r-- 1 abhishek abhishek 11 Apr 30 04:11 target.txt
 ```
 The username, group, and other properties of the file will be different, but
@@ -172,7 +174,7 @@ fs.watch(filename, () => {
 })
 ```
 After running the program and using ```touch``` we should see soemthing like this :
-```Unix
+```bash
 $ node watcher-spawn-parse.js target.txt
 Now watching target.txt for changes...
 [ '-rw-rw-r--', '11', 'target.txt' ]
@@ -227,7 +229,7 @@ fs.readFile('target.txt', (err, data) => {
 }
 ```
 Save this as ```read-simple.js``` and run.
-```Unix
+```bash
 $ node read-simple.js
 ```
 The contents of ```target.txt``` will be printed in the command line.
@@ -270,11 +272,11 @@ require('fs').createReadStream(process.argv[2]).pipe(process.stdout)
 * As the first line starts with ```#!```, this program can be directly executed without passing into ```node```.
 
 * Make it executable using ```chmod```
-``` Unix
+``` bash
 $ chmod +x cat.js
 ```
 * Pass filenames like this
-```Unix
+```bash
 $ ./cat.js target.txt
 Let there be light
 ```
@@ -294,7 +296,7 @@ require('fs').createReadStream(process.argv[2])
 * When working with an EventEmitter, the way to handle errors is to listen for
 error events.
 * On triggering the error (by specifying a file to read that doesn't exist) we get
-```Unix
+```bash
 Error: ENOENT: no such file or directory, open 'targe.txt'
 ```
 

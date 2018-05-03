@@ -65,7 +65,7 @@ net.createServer(connection => {
   })
 }).listen(60300, () => console.log('Listening for subscribers...'))
 ```
-*Points to note :*
+***Points to note :***
 
 The callback to ```createServer()``` does three things
 * It reports connection establishment (both to the client using ```connection.write``` and to the console)
@@ -127,3 +127,76 @@ File changed: Wed May 02 2018 23:51:19 GMT+0530 (IST)
 Unix sockets are faster than TCP sockets because they don't require invoking network hardware. However, by nature they are confined to the machine.
 
 ### Implementing a Messaging Protocol
+
+A *protocol* is a set of rules that defines how endpoints in a system communicate. 
+
+Here we’ll create a protocol based on passing JSON messages over TCP. JSON is incredibly prevalent in Node.js.
+
+#### Serializing Messages with JSON
+Example JSON object with two key-value pairs:
+``` json 
+{"key":"value", "anotherKey":"anotherValue"}
+```
+The net-watcher service developed in this chapter sends two kinds of messages :
+* When the connection is first established, the client receives the string *Now watching "target.txt" for changes...*
+* Whenever the target file changes, the client receives a string like this: *File changed: Fri Dec 18 2015 05:44:00 GMT-0500 (EST)*
+
+The first kind of message is to be encoded this way:
+```json
+{"type":"watching", "file":"target.txt"}
+```
+The type field indicates that this is a ```watching``` message—the specified ```file``` is now
+being watched.
+
+The second kind of message is encoded this way :
+```json
+{"type":"changed", "timestamp":1358175733785}
+```
+Here the ```type``` field announces that the target file has changed.
+
+The ```timestamp``` field contains UNIX time i.e. milliseconds since January 1, 1970.
+
+This protocol will be referred to as Line-Delimited JSON (LDJ).
+
+#### Switching to JSON Messages
+
+In the ```net-watcher.js``` program, find the following line :
+```javascript
+connection.write(`Now watching "${filename}" for changes...\n`)
+```
+And replace it with this :
+```javascript
+connection.write(JSON.stringify({type: 'watching', file: filename}) + '\n')
+```
+Next, find the call to ```connection.write()``` inside the watcher :
+```javascript
+const watcher = fs.watch(filename, () => connection.write(`File changed: ${new Date()}\n`))
+```
+And replace it with this :
+```javascript
+const watcher = fs.watch(filename, () => connection.write(
+JSON.stringify({type: 'changed', timestamp: Date.now()}) + '\n'))
+```
+Save this updated file as ```net-watcher-json-service.js```. Run the new program.
+```javascript
+$ node net-watcher-json-service.js target.txt
+Listening for subscribers...
+```
+Then connect using netcat from second terminal :
+```bash
+$ nc localhost 60300
+{"type":"watching","file":"target.txt"}
+```
+When we ```touch``` the ```target.txt```, we get following output from the client :
+```bash
+{"type":"changed","timestamp":1525368888725}
+```
+***Points to note :***
+* We used ```JSON.stringify()``` to encode message objects and send them out through ```connection.write()```.
+* ```JSON.stringify()``` takes a JavaScript object, and returns a string containing serialized representation of that object in JSON form.
+
+### Creating Socket Client Connections
+
+
+
+

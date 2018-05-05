@@ -197,6 +197,42 @@ When we ```touch``` the ```target.txt```, we get following output from the clien
 
 ### Creating Socket Client Connections
 
+In the editor insert this code and save as ```net-watcher-json-client.js```
+```javascript
+const net = require('net')
+const client = net.connect({port: 60300})
 
+client.on('data', data => {
+  const message = JSON.parse(data)
+  if (message.type === 'watching') {
+    console.log(`Now watching: ${message.file}`)
+  } else if (message.type === 'changed') {
+    const date = new Date(message.timestamp)
+    console.log(`File changed: ${date}`)
+  } else {
+    console.log(`Unrecognized message type: ${message.type}`)
+  }
+})
+```
+We run this program and ```touch``` the ```target.txt```
 
+To run the program, first make sure the ```net-watcher-json-service``` is running. Then, in another terminal, run the client:
+```bash
+$ node net-watcher-json-client.js
+Now watching: target.txt
+```
+After we ```touch``` the ```target.txt``` we see a message like this :
+```bash
+File changed: Sat May 05 2018 23:49:16 GMT+0530 (IST)
+```
 
+***Points to note :***
+* This short program uses ```net.connect()``` to create a client connection to localhost
+port 60300, then waits for data.
+* The ```client``` object is a ```Socket```, just like the incoming connection we saw on the server side.
+* Whenever a ```data``` event happens, the callback function takes the incoming
+buffer object, parses the JSON message, and then logs an appropriate message
+to the console.
+* This program only listens for ```data``` events, not end events or error events.
+
+### Testing Network Application Functionality

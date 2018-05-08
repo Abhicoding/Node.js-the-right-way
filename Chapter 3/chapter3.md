@@ -466,3 +466,45 @@ File changed: Sun Jan 18 1970 21:15:49 GMT+0530 (IST)
 We now have a server and client that use a custom message format to reliably communicate.
 
 ### Developing Unit Tests with Mocha
+Mocha is a popular, multi-paradigm testing framework for Node.js. It features several different styles for describing your tests. We’ll be using the BehaviorDriven Design (BDD) style.
+
+#### Installing Mocha With ```npm```
+```npm``` relies on a configuration file called package.json, so let’s create one now.
+Open a terminal to your networking project and run this :
+
+```bash
+$ npm init -y
+```
+Calling ```npm init``` will create a default package.json file.
+
+Next we install Mocha by running ```npm install```
+```bash
+npm install --save-dev --save-exact mocha@3.4.2
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN networking@1.0.0 No description
+npm WARN networking@1.0.0 No repository field.
+
++ mocha@3.4.2
+added 34 packages from 290 contributors in 10.233s
+```
+***Points to note :***
+
+* We can safely ignore the warnings in the output for now. npm is just suggesting that you add some descriptive fields to your package.json.
+* We now have a folder called ```node_modules``` in our project which contains Mocha and its dependencies.
+* In ```package.json``` we find this field :
+  ```json
+  "devDependencies": {
+    "mocha": "3.4.2"
+  }
+  ```
+  In Node.js, there are a few different kinds of dependencies. Regular dependencies are used at run time by your code when you use ```require()``` to bring in
+  modules. Dev dependencies are programs that your project needs during
+  development. Mocha is the latter kind, and the ```--save-dev``` flag (```-D``` for short) told
+  npm to add it to the ```devDependencies``` list.
+* Both dev dependencies and regular runtime dependencies are installed when you run ```npm install``` with no additional arguments.
+* For running only regular runtime dependencies and not dev dependencies we use ```npm install``` with ```--production``` flag or setting ```NODE_ENV``` to *production*.
+
+#### Semantic Versioning of Packages
+
+
+
